@@ -34,10 +34,10 @@ class ForwardAlert(PluginBase):
             return
 
         alert.attributes['fw_count'] = fw_count
-        print(alert.serialize)
-        print(
-            **alert.serialize
-        )
+        LOG.debug(% alert)
+        LOG.debug(alert.serialize)
+        LOG.debug(% alert.serialize)
+        LOG.debug(alert)
         client.send_alert(alert.serialize)
         return
 
