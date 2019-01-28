@@ -35,9 +35,9 @@ class ForwardAlert(PluginBase):
 
         alert.attributes['fw_count'] = fw_count
         LOG.debug(
-            **alert.serialize
+            alert.serialize
                  )
-        client.send_alert(alert.serialize)
+        client.send_alert(**alert.serialize)
         return
 
     def status_change(self, alert, status, text):
