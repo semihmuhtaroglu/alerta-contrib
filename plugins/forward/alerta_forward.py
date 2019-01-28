@@ -26,7 +26,7 @@ class ForwardAlert(PluginBase):
     def post_receive(self, alert):
         if not FORWARD_URL or not FORWARD_API_KEY:
             return
-        client = Client(endpoint=FORWARD_URL, key=FORWARD_API_KEY)
+        client = Client(endpoint=FORWARD_URL, key=FORWARD_API_KEY, debug=True)
         fw_count = alert.attributes.get('fw_count') or 0
         fw_count = int(fw_count)+1
         if fw_count >= FORWARD_MAX_LENGTH:
@@ -34,11 +34,9 @@ class ForwardAlert(PluginBase):
             return
 
         alert.attributes['fw_count'] = fw_count
-        LOG.debug('semih1')
         LOG.debug(
             alert.serialize
                  )
-        LOG.debug('semih2')
         client.send_alert(**alert.serialize)
         return
 
