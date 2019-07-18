@@ -32,6 +32,15 @@ class AzureMonitorWebhook(WebhookBase):
                 event_type = 'MetricAlert'
                 text = '{}: {} {} ({} {})'.format(severity.upper(), payload['data']['context']['condition']['allOf'][0]['metricValue'], payload['data']['context']['condition']['allOf'][0]['metricName'], payload['data']['context']['condition']['allOf'][0]['operator'], payload['data']['context']['condition']['allOf'][0]['threshold'])
                 value = '{} {}'.format(payload['data']['context']['condition']['allOf'][0]['metricValue'], payload['data']['context']['condition']['allOf'][0]['metricName'])
+            elif payload['schemaId'] == 'azureMonitorCommonAlertSchema':
+                resource        = payload['data']['essentials']['monitoringService']
+                create_time     = payload['data']['essentials']['firedDateTime']
+                event           = payload['data']['essentials']['alertRule']
+                service         = 'Microsoftoperational/Insights'
+                group           = payload['data']['essentials']['signalType']
+                event_type = 'LogAnalyticAlert'
+                text = '{} {} {} {}'.format(payload['data']['essentials']['signalType'], payload['data']['alertContext']['AlertType'], payload['data']['alertContext']['Operator'], payload['data']['alertContext']['Threshold'])
+                value = '{}'.format(payload['data']['alertContext']['ResultCount'])   
             else:
                 text = '{}'.format(severity.upper())
                 value = ''
