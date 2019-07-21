@@ -26,15 +26,15 @@ class AzureMonitorWebhook(WebhookBase):
 
         # Alerts (new)
         if 'data' in payload:
-  	        if payload['schemaId'] == 'AzureMonitorMetricAlert':
-		        context = payload['data']['context']
+  	    if payload['schemaId'] == 'AzureMonitorMetricAlert':
+		context = payload['data']['context']
             	status = payload['data']['status']
             	if status == 'Resolved' or status == 'Deactivated':
                     severity = 'ok'
             	else:
                	    severity = SEVERITY_MAP[context.get('severity', DEFAULT_SEVERITY_LEVEL)]
 		
-		        resource = context['resourceName']
+		resource = context['resourceName']
                 event = context['name']
                 environment = query_string.get('environment', 'Production')
                 service = [context['resourceType']]
@@ -53,7 +53,7 @@ class AzureMonitorWebhook(WebhookBase):
                     context['condition']['allOf'][0]['metricValue'],
                     context['condition']['allOf'][0]['metricName'])
 
-	        elif payload['schemaId'] == 'azureMonitorCommonAlertSchema':
+	    elif payload['schemaId'] == 'azureMonitorCommonAlertSchema':
                 resource        = payload['data']['essentials']['monitoringService']
                 create_time     = payload['data']['essentials']['firedDateTime']
                 event           = payload['data']['essentials']['alertRule']
