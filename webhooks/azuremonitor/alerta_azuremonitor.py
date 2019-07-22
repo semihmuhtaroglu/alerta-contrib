@@ -26,8 +26,9 @@ class AzureMonitorWebhook(WebhookBase):
 
         # Alerts (new)
         if 'data' in payload:
-  	    if payload['schemaId'] == 'AzureMonitorMetricAlert':
-		context = payload['data']['context']
+  	    
+	    if payload['schemaId'] == 'AzureMonitorMetricAlert':
+	        context = payload['data']['context']
             	status = payload['data']['status']
             	if status == 'Resolved' or status == 'Deactivated':
                     severity = 'ok'
