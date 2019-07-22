@@ -26,23 +26,24 @@ class AzureMonitorWebhook(WebhookBase):
 
         # Alerts (new)
         if 'data' in payload:
-  	    
-	    if payload['schemaId'] == 'AzureMonitorMetricAlert':
-	        context = payload['data']['context']
-            	status = payload['data']['status']
-            	if status == 'Resolved' or status == 'Deactivated':
-                    severity = 'ok'
-            	else:
-               	    severity = SEVERITY_MAP[context.get('severity', DEFAULT_SEVERITY_LEVEL)]
-		
-		resource = context['resourceName']
-                event = context['name']
-                environment = query_string.get('environment', 'Production')
-                service = [context['resourceType']]
-                group = context['resourceGroupName']
-                tags = [] if payload['data']['properties'] is None else ['{}={}'.format(k, v) for k, v in
-                                                                 payload['data']['properties'].items()]
-                create_time = parse_date(context['timestamp'])
+            context = payload['data']['context']
+
+            status = payload['data']['status']
+            if status == 'Resolved' or status == 'Deactivated':
+                severity = 'ok'
+            else:
+                severity = SEVERITY_MAP[context.get('severity', DEFAULT_SEVERITY_LEVEL)]
+
+            resource = context['resourceName']
+            event = context['name']
+            environment = query_string.get('environment', 'Production')
+            service = [context['resourceType']]
+            group = context['resourceGroupName']
+            tags = [] if payload['data']['properties'] is None else ['{}={}'.format(k, v) for k, v in
+                                                             payload['data']['properties'].items()]
+            create_time = parse_date(context['timestamp'])
+
+            if payload['schemaId'] == 'AzureMonitorMetricAlert':
                 event_type = 'MetricAlert'
                 text = '{}: {} {} ({} {})'.format(
                     severity.upper(),
@@ -53,7 +54,6 @@ class AzureMonitorWebhook(WebhookBase):
                 value = '{} {}'.format(
                     context['condition']['allOf'][0]['metricValue'],
                     context['condition']['allOf'][0]['metricName'])
-
 	    elif payload['schemaId'] == 'azureMonitorCommonAlertSchema':
                 resource        = payload['data']['essentials']['monitoringService']
                 create_time     = payload['data']['essentials']['firedDateTime']
@@ -63,12 +63,10 @@ class AzureMonitorWebhook(WebhookBase):
                 event_type = 'LogAnalyticAlert'
                 text = '{} {} {} {}'.format(payload['data']['essentials']['signalType'], payload['data']['alertContext']['AlertType'], payload['data']['alertContext']['Operator'], payload['data']['alertContext']['Threshold'])
                 value = '{}'.format(payload['data']['alertContext']['ResultCount']) 
-
             else:
                 text = '{}'.format(severity.upper())
                 value = ''
                 event_type = 'EventAlert'
-            
 
         # Alerts (classic)
         else:
