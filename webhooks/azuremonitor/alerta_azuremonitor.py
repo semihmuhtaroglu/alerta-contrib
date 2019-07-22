@@ -55,7 +55,7 @@ class AzureMonitorWebhook(WebhookBase):
                     context['condition']['allOf'][0]['metricName'])
 		
 	    elif self.payload and self.payload['schemaId'] == 'azureMonitorCommonAlertSchema':
-                self.resource        = self.payload['data']['essentials']['monitoringService']
+                resource        = self.payload['data']['essentials']['monitoringService']
                 create_time     = payload['data']['essentials']['firedDateTime']
                 event           = payload['data']['essentials']['alertRule']
                 service         = 'Microsoftoperational/Insights'
