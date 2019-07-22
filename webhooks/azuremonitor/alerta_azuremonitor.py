@@ -42,7 +42,8 @@ class AzureMonitorWebhook(WebhookBase):
             tags = [] if payload['data']['properties'] is None else ['{}={}'.format(k, v) for k, v in
                                                              payload['data']['properties'].items()]
             create_time = parse_date(context['timestamp'])
-
+	    print(payload)
+		
             if payload['schemaId'] == 'AzureMonitorMetricAlert':
                 event_type = 'MetricAlert'
                 text = '{}: {} {} ({} {})'.format(
