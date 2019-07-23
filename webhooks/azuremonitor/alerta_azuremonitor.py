@@ -27,6 +27,7 @@ class AzureMonitorWebhook(WebhookBase):
         # Alerts (new)
         if 'data' in payload:
             context = payload['data']['context']
+
             status = payload['data']['status']
             if status == 'Resolved' or status == 'Deactivated':
                 severity = 'ok'
@@ -41,17 +42,8 @@ class AzureMonitorWebhook(WebhookBase):
             tags = [] if payload['data']['properties'] is None else ['{}={}'.format(k, v) for k, v in
                                                              payload['data']['properties'].items()]
             create_time = parse_date(context['timestamp'])
-		
-            if payload['schemaId'] == 'azureMonitorCommonAlertSchema':
-                resource        = self.payload['data']['essentials']['monitoringService']
-                create_time     = payload['data']['essentials']['firedDateTime']
-                event           = payload['data']['essentials']['alertRule']
-                service         = 'Microsoftoperational/Insights'
-                group           = payload['data']['essentials']['signalType']
-                event_type = 'LogAnalyticAlert'
-                text = '{} {} {} {}'.format(payload['data']['essentials']['signalType'], payload['data']['alertContext']['AlertType'], payload['data']['alertContext']['Operator'], payload['data']['alertContext']['Threshold'])
-                value = '{}'.format(payload['data']['alertContext']['ResultCount']) 
-	    elif payload['schemaId'] == 'AzureMonitorMetricAlert':
+
+            if payload['schemaId'] == 'AzureMonitorMetricAlert':
                 event_type = 'MetricAlert'
                 text = '{}: {} {} ({} {})'.format(
                     severity.upper(),
@@ -61,7 +53,7 @@ class AzureMonitorWebhook(WebhookBase):
                     context['condition']['allOf'][0]['threshold'])
                 value = '{} {}'.format(
                     context['condition']['allOf'][0]['metricValue'],
-                    context['condition']['allOf'][0]['metricName'])	
+                    context['condition']['allOf'][0]['metricName'])
             else:
                 text = '{}'.format(severity.upper())
                 value = ''
