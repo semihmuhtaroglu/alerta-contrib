@@ -26,7 +26,7 @@ class AzureLogMonitorWebhook(WebhookBase):
 
         # Alerts (new)
         if 'data' in payload:
-	    severity = 'Major'
+	    severity = DEFAULT_SEVERITY_LEVEL
             if payload['schemaId'] == 'azureMonitorCommonAlertSchema':
                 resource        = payload['data']['essentials']['monitoringService']
                 create_time     = payload['data']['essentials']['firedDateTime']
