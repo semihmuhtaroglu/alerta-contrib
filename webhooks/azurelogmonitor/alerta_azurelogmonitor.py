@@ -26,14 +26,14 @@ class AzureLogMonitorWebhook(WebhookBase):
 
         # Alerts (new)
         if 'data' in payload:
-	    severity = payload['data']['essentials']['severity']
-	    environment = query_string.get('environment', 'Production')
+	    severity = 'Major'
             if payload['schemaId'] == 'azureMonitorCommonAlertSchema':
                 resource        = payload['data']['essentials']['monitoringService']
                 create_time     = payload['data']['essentials']['firedDateTime']
                 event           = payload['data']['essentials']['alertRule']
                 service         = 'Microsoftoperational/Insights'
                 group           = payload['data']['essentials']['signalType']
+		environment = query_string.get('environment', 'Production')
                 event_type = 'LogAnalyticAlert'
                 text = '{} {} {} {}'.format(payload['data']['essentials']['signalType'], payload['data']['alertContext']['AlertType'], payload['data']['alertContext']['Operator'], payload['data']['alertContext']['Threshold'])
                 value = '{}'.format(payload['data']['alertContext']['ResultCount']) 
