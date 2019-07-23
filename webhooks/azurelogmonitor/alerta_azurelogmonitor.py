@@ -32,8 +32,8 @@ class AzureLogMonitorWebhook(WebhookBase):
                 event           = payload['data']['essentials']['alertRule']
                 service         = 'Microsoftoperational/Insights'
                 group           = payload['data']['essentials']['signalType']
-		environment = query_string.get('environment', 'Production')
-                event_type = 'LogAnalyticAlert'
+		environment     = 'Production'
+                event_type      = 'LogAnalyticAlert'
                 text = '{} {} {} {}'.format(payload['data']['essentials']['signalType'], payload['data']['alertContext']['AlertType'], payload['data']['alertContext']['Operator'], payload['data']['alertContext']['Threshold'])
                 value = '{}'.format(payload['data']['alertContext']['ResultCount']) 
             else:
