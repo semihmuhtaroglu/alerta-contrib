@@ -26,7 +26,6 @@ class AzureLogMonitorWebhook(WebhookBase):
 
         # Alerts (new)
         if 'data' in payload:
-	    environment = query_string.get('environment', 'Production')
             if payload['schemaId'] == 'azureMonitorCommonAlertSchema':
                 resource        = payload['data']['essentials']['monitoringService']
                 create_time     = payload['data']['essentials']['firedDateTime']
