@@ -35,6 +35,8 @@ class AzureLogMonitorWebhook(WebhookBase):
                 event_type      = 'LogAnalyticAlert'
                 text = '{} {} {} {}'.format(payload['data']['essentials']['signalType'], payload['data']['alertContext']['AlertType'], payload['data']['alertContext']['Operator'], payload['data']['alertContext']['Threshold'])
                 value = '{}'.format(payload['data']['alertContext']['ResultCount']) 
+                severity = '1'
+                environment = 'Production'
             else:
                 text = '{}'.format(severity.upper())
                 value = ''
