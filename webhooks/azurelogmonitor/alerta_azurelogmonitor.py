@@ -37,6 +37,7 @@ class AzureLogMonitorWebhook(WebhookBase):
                 value = '{}'.format(payload['data']['alertContext']['ResultCount']) 
                 severity = '1'
                 environment = 'Production'
+                tags = []
             else:
                 text = '{}'.format(severity.upper())
                 value = ''
